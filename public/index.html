@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>讲解石追踪器</title>
+  <link rel="stylesheet" href="/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+  <!-- 登录/注册 -->
+  <div id="auth-view" class="auth-wrap hidden">
+    <div class="bg-blob b1"></div>
+    <div class="bg-blob b2"></div>
+    <div class="bg-blob b3"></div>
+    <div class="bg-grid"></div>
+    <div class="auth-card">
+      <div class="brand-row">
+        <div class="logo-mark">◆</div>
+        <div>
+          <h1 class="brand">讲解石追踪器</h1>
+          <p class="sub">API 用量监控 · 月度账单 · 多供应商对比</p>
+        </div>
+      </div>
+      <svg class="spark" viewBox="0 0 320 56" preserveAspectRatio="none" aria-hidden="true">
+        <path class="line" d="M0,44 C28,40 44,30 66,33 C88,36 104,24 128,26 C152,28 168,16 192,19 C216,22 234,10 258,12 C282,14 300,6 320,8"/>
+      </svg>
+      <div class="tabs">
+        <button id="tab-login" class="tab active">登录</button>
+        <button id="tab-register" class="tab">注册</button>
+      </div>
+      <form id="auth-form" autocomplete="off">
+        <label>邮箱</label>
+        <input type="email" id="auth-email" placeholder="you@example.com" required />
+        <label>密码</label>
+        <input type="password" id="auth-password" placeholder="至少 6 位" required />
+        <button type="submit" id="auth-submit" class="btn primary">登录</button>
+        <p id="auth-msg" class="msg"></p>
+      </form>
+      <p class="auth-foot">本地部署 · 数据加密存储 · 多供应商用量可视化</p>
+    </div>
+  </div>
+
+  <!-- 仪表盘 -->
+  <div id="dash-view" class="dash hidden">
+    <header class="topbar">
+      <div class="top-left">
+        <span class="logo-dot"></span>
+        <span class="brand">讲解石追踪器</span>
+      </div>
+      <div class="top-right">
+        <button id="btn-bill" class="btn ghost">月度账单</button>
+        <span id="user-email" class="user-email"></span>
+        <button id="btn-logout" class="btn ghost">退出</button>
+      </div>
+    </header>
+
+    <main class="container">
+      <div id="cards" class="cards"></div>
+
+      <section class="panel">
+        <h2>用量对比（近 30 天 · 估算花费）</h2>
+        <div class="chart-box tall"><canvas id="compare-chart"></canvas></div>
+      </section>
+
+      <section id="bill-section" class="panel">
+        <h2>本月账单 · 占比</h2>
+        <div id="bill-empty" class="empty">暂无数据。系统每 15 分钟自动记录一次余额，产生花费后这里会显示占比。</div>
+        <div id="bill-content" class="bill-content hidden">
+          <div class="chart-box medium"><canvas id="bill-pie"></canvas></div>
+          <table class="bill-table">
+            <thead><tr><th>供应商</th><th>花费(估)</th><th>token</th><th>请求</th><th>占比</th></tr></thead>
+            <tbody id="bill-tbody"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <!-- 右下角加号 -->
+    <button id="btn-add" class="fab" title="添加供应商">+</button>
+
+    <footer class="footer">
+      讲解石追踪器 · 数据仅存于你自己的账号，API Key 加密存储
+    </footer>
+  </div>
+
+  <!-- 添加供应商弹窗 -->
+  <div id="modal" class="modal hidden">
+    <div class="modal-card">
+      <h3>添加供应商</h3>
+      <label>供应商</label>
+      <select id="m-slug"></select>
+      <label>显示名称（可选）</label>
+      <input type="text" id="m-label" placeholder="不填则用默认名" />
+      <label>API Key</label>
+      <input type="password" id="m-key" placeholder="粘贴你的 API Key" />
+      <p id="m-hint" class="hint"></p>
+      <p class="hint">API Key 会加密存储，只用于向官方查询用量。</p>
+      <div class="modal-actions">
+        <button id="m-cancel" class="btn ghost">取消</button>
+        <button id="m-save" class="btn primary">保存</button>
+      </div>
+      <p id="m-msg" class="msg"></p>
+    </div>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
